@@ -1,0 +1,66 @@
+﻿@model ReadIt.Models.ReadDocumentViewModel
+
+@{
+  ViewData["Title"] = "CommentList";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>My reviews</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+        @Html.DisplayNameFor(model => Model.Comment.Content)
+      </th>
+      <th>
+        Book Name
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => Model.Comment.PostedTime)
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @{var count = 0;
+      foreach (var item in Model.Comments)
+      {
+        if (Model.CurrentUserId == item.CommentUserId)
+        {
+          <tr>
+            <td>
+              @foreach (var doc in Model.Documents)
+              {
+                if (doc.DocumentId == item.DocumentId)
+                {
+                  count++;
+                  <a asp-action="ReadDocument" asp-route-id="@item.DocumentId">@doc.Title</a>
+                }
+              }
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.PostedTime)
+            </td>
+            <td>
+              <a asp-action="CommentDelete" asp-controller="Home" asp-route-id="@item.CommentId" >Delete</a>
+            </td>
+          </tr>
+        }
+      }
+      if (count == 0)
+      {
+        <tr>
+          <td>
+            No review yet.
+          </td>
+        </tr>
+      }
+    }
+  </tbody>
+</table>
+
+<a asp-action="Index" asp-controller="Home">Back to Bookshelf</a>

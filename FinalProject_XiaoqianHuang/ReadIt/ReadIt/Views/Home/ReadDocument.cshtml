@@ -1,0 +1,216 @@
+﻿@model ReadIt.Models.ReadDocumentViewModel
+
+@{
+  ViewData["Title"] = "ReadDocument";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    function checkIframeLoaded() {
+      // Get a handle to the iframe element
+      var iframe = document.getElementById('theframe');
+      var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+      // Check if loading is complete
+      if (iframeDoc.readyState != 'complete') {
+        var frame = document.getElementById('theframe');
+        frame.src = "~/BookLibrary/Errorpage/Errorpage.html";
+        frame.location.reload();
+      }
+      // The loading is complete, call the function we want executed once the iframe is loaded
+      return;
+    }
+    var counter = 0;
+    function larger(theframe) {
+      var frame = document.getElementById(theframe);
+      
+      frame.style.zoom = 1.1 * frame.style.zoom;
+      frame.style.fontSize = "larger";
+      //frame.width = 1.1 * frame.width;
+      //frame.height = 1.1 * frame.height;
+    }
+    function smaller(theframe) {
+      var frame = document.getElementById(theframe);
+      frame.style.zoom = frame.style.zoom / 1.1;
+      frame.style.fontSize = "smaller";
+      //frame.width = frame.width / 1.1;
+      //frame.height = frame.height / 1.1;
+    }
+    
+      function hide(framediv) {
+        var frame = document.getElementById(framediv);
+        if (counter == 0) {
+          frame.style.display = "none";
+          counter = 1;
+          var button = document.getElementById("hide");
+          button.textContent = "Show";
+        }
+        else {
+          frame.style.display = "block";
+          counter = 0;
+          var button = document.getElementById("hide");
+          button.textContent = "Hide";
+        }
+      }
+      
+
+  </script>
+</head>
+<body onload="checkIframeLoaded()">
+  <h1>@Model.Document.Title</h1>
+  <div>
+    <p>
+      <h6>
+        <strong>Author  </strong>
+        @{
+          var counter1 = 0;
+          foreach (var record in Model.DocumentAuthors)
+          {
+            if (Model.Document.DocumentId == record.DocumentId)
+            {
+              foreach (var author in Model.Authors)
+              {
+                if (record.AuthorId == author.AuthorId)
+                {
+                  if (counter1 != 0)
+                  {
+                    <label>,</label>
+                  }
+                  counter1++;
+                  <a asp-action="AuthorDetails" asp-controller="Author" asp-route-id="@author.AuthorId">@author.AuthorName </a>
+                }
+              }
+            }
+          }
+        }
+      </h6>
+    </p>
+    <p>
+      <h6>
+        <strong>Category  </strong>
+        @{
+          var counter = 0;
+          foreach (var record in Model.DocumentCategories)
+          {
+            if (Model.Document.DocumentId == record.DocumentId)
+            {
+              foreach (var category in Model.Categories)
+              {
+                if (record.CategoryId == category.CategoryId)
+                {
+                  if (counter != 0)
+                  {
+                    <label>,</label>
+                  }
+                  counter++;
+                  <a asp-action="CategoryDetails" asp-controller="Category" asp-route-id="@category.CategoryId">@category.CategoryName </a>
+                }
+              }
+            }
+          }
+        }
+      </h6>
+    </p>
+    <div>
+      <p><h6><strong>Introduction</strong></h6></p>
+      <div>
+        @Model.Document.DocumentIntro
+      </div>
+    </div>
+    <hr />
+    <p><strong>Authority  </strong> @Model.Document.Authority</p>
+    <p><strong>Uploaded by  </strong> @Model.Document.UploadUserName, @Model.Document.LastUpdateTime.ToShortDateString() @Model.Document.LastUpdateTime.ToShortTimeString()</p>
+  </div>
+
+  <p></p>
+  <hr style="clear:right" />
+  <p></p>
+  <div id="sizer">
+    <button type="button" onclick="hide('framediv')" id="hide">Hide</button>
+    &nbsp&nbsp
+    <button type="button" onclick="smaller('theframe')">-</button>
+    &nbsp&nbsp
+    <button type="button" onclick="larger('theframe')">+</button>
+
+    <spacer-15></spacer-15>
+    <p></p>
+    @if (Model.Document.StoragePath == null)
+    {
+      <div id="framediv">
+        <iframe src="~/FileStorage/Errorpage/Errorpage.html" id="theframe" width="1100" height="200" frameborder="0" onreadystatechange="check404(theframe)" style="zoom:1"></iframe>
+      </div>
+    }
+    else
+    {
+      <div id="framediv">
+        <iframe src="~/FileStorage/@Model.Document.StoragePath" id="theframe" width="1100" height="1000" frameborder="0" onreadystatechange="check404(theframe)" style="zoom:1"></iframe>
+      </div>
+    }
+  </div>
+  <p></p>
+  <hr />
+  <p></p>
+  <p></p>
+
+  <form asp-action="CreateComment" asp-controller="Home">
+    <input type="hidden" asp-for="CurrentUserId" />
+    <input type="hidden" asp-for="CurrentUserName" />
+    <input type="hidden" asp-for="Document.DocumentId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div width="1100" style="float:right;">
+      <div class="form-group">
+        <textarea asp-for="Comment.Content" class="form-control" style="width:600px; height:150px; overflow:auto; text-align:start;">Any comment?</textarea>
+        <span asp-validation-for="Comment.Content" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Comment" class="blackbtn btn" style="float:right;" />
+      </div>
+    </div>
+  </form>
+
+  <p style="clear:right"></p>
+  <hr style="clear:right" />
+  <p></p>
+  <div style="clear:right; width:1300px">
+    <h2>Comment List</h2>
+
+    @{var counter2 = 0;
+      foreach (var item in Model.Comments)
+      {
+        if (Model.CurrentUserRole == "Admin" || Model.CurrentUserId == item.CommentUserId)
+        {
+          if (Model.Document.DocumentId == item.DocumentId)
+          {
+            <div style="border-bottom:solid 0.5px; width:800px;height:auto;overflow:auto;padding:10px;margin:5px">
+              @item.Content
+            </div>
+            <p style="font-style:italic;margin-left:5px;width:800px">
+              posted by: @item.CommentUserName, @item.PostedTime.ToShortDateString() @item.PostedTime.ToShortTimeString()
+              <a asp-action="CommentDelete" asp-controller="Home" asp-route-id="@item.CommentId" style="float:right">Delete</a>
+            </p>
+            counter2++;
+          }
+        }
+      }
+      if (counter2 == 0)
+      {
+        <p>No comment yet.</p>
+      }
+    }
+  </div>
+
+  <div>
+    <a asp-action="EditDocument" asp-route-id="@Model.Document.DocumentId">Edit</a> |
+    <a asp-action="Index">Back to Bookshelf</a>
+  </div>
+</body>
+</html>
+
+
+
+
+@section Scripts {
+  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

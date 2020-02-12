@@ -1,0 +1,77 @@
+﻿@model ReadIt.Models.AuthorDetailViewModel
+
+@{
+    ViewData["Title"] = "AuthorDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Author Details</h1>
+
+<div>
+    <h4>Author</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Author.AuthorName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Author.AuthorName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Author.AuthorIntro)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Author.AuthorIntro)
+        </dd>
+    </dl>
+</div>
+<div>
+  <h4>Book List</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          Title
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @{var counter = 0;
+        foreach (var record in Model.DocumentAuthors)
+        {
+          @if (record.AuthorId == Model.Author.AuthorId)
+          {
+            @foreach (var document in Model.Documents)
+            {
+              if (document.DocumentId == record.DocumentId)
+              {
+                if (!(Model.CurrentUserRole == "User" && document.Authority == "private" && document.UploadUserId != Model.CurrentUserId))
+                {
+                  <tr>
+                    <td>
+                      <a asp-action="ReadDocument" asp-controller="Home" asp-route-id="@document.DocumentId">@document.Title</a>
+                    </td>
+                  </tr>
+                  counter++;
+                }
+              }
+            }
+          }
+        }
+        @if (counter == 0)
+        {
+          <tr>
+            <td>
+              No book wrote by this author.
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>
+<div>
+  <a asp-action="AuthorEdit" asp-controller="Author" asp-route-id="@Model.Author.AuthorId">Edit</a> | 
+  <a asp-action="CategoryIndex" asp-controller="Author">Back to Author List</a> |
+  <a asp-action="Index" asp-controller="Home">Back to Bookshelf</a>
+</div>

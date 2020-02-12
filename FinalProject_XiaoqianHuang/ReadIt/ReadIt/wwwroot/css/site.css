@@ -1,0 +1,137 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+}
+body {
+  /*background: url('../image/background.jpg') no-repeat;*/
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-clip: content-box;
+  background-attachment: scroll;
+  /*overflow-x: hidden;*/
+  /*background-size: cover;*/
+}
+body, html {
+  overflow-x: hidden;
+}
+#backgroundImage {
+  width: 1400px;
+  height: 2580px;
+  /*background: url('../image/XiaoqianHuang.png') no-repeat;
+  background-size: 5%;
+  background-position: bottom right;*/
+}
+#link1 {
+  clear: both;
+  position: relative;
+  /*left: 535px;
+  top: 700px;*/
+  left: 55%;
+  top: 32%;
+}
+#link2 {
+  clear: both;
+  position: relative;
+  /*left: 260px;
+  top: 1450px;*/
+  left: 58%;
+  top:70%;
+}
+#link1img {
+  clear: both;
+  width: 25%;
+  height: auto;
+  /*left: 535px;
+  top: 700px;*/
+}
+#link2img {
+  clear: both;
+  width: 18%;
+  height: auto;
+  /*left: 260px;
+  top: 1450px;*/
+}
+#text {
+  position: relative;
+  left: 10%;
+  top: 80%;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: black;
+}
+li {
+  float: left;
+}
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+li a:hover {
+  background-color: #111;
+}
+
+.text-cente{
+  text-align:center;
+}
+.text-danger{
+  text-decoration-color:red;
+}

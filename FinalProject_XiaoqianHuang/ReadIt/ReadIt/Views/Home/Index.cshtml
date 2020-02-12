@@ -1,0 +1,118 @@
+﻿@model ReadIt.Models.IndexViewModel
+
+@{
+  ViewData["Title"] = "Home Page";
+}
+<h1>Bookshelf</h1>
+<h3>Only public books and your own privated books will be displayed.</h3>
+<p>
+  <a asp-action="CreateDocument" asp-controller="Home">Create New Book</a>
+</p>
+<div class="text-center"  style="text-align:center">
+  <table class="table">
+    <thead class="title">
+      <tr>
+        <th>
+          Title
+        </th>
+        <th>
+          Author
+        </th>
+        <th>
+          Category
+        </th>
+        <th>
+          Posted by
+        </th>
+        <th style="width:300px">
+          Operations
+        </th>
+        <th style="width:150px">
+          Last Updated
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model.Documents)
+      {
+        if (!(Model.CurrentUserRole == "User" && item.Authority == "private" && item.UploadUserId != Model.CurrentUserId))
+        {
+          <tr>
+            <td>
+              <a asp-action="ReadDocument" asp-route-id="@item.DocumentId">@item.Title</a>
+            </td>
+            <td>
+              @{
+                var counter1 = 0;
+                foreach (var record in Model.DocumentAuthors)
+                {
+                  if (item.DocumentId == record.DocumentId)
+                  {
+                    foreach (var author in Model.Authors)
+                    {
+                      if (record.AuthorId == author.AuthorId)
+                      {
+                        if (counter1 != 0)
+                        {
+                          <label>,</label>
+                        }
+                        counter1++;
+                        <a asp-action="AuthorDetails" asp-controller="Author" asp-route-id="@author.AuthorId">@author.AuthorName </a>
+                      }
+                    }
+                  }
+                }
+              }
+            </td>
+            <td>
+              @{
+                var counter = 0;
+                foreach (var record in Model.DocumentCategories)
+                {
+                  if (item.DocumentId == record.DocumentId)
+                  {
+                    foreach (var category in Model.Categories)
+                    {
+                      if (record.CategoryId == category.CategoryId)
+                      {
+                        if (counter != 0)
+                        {
+                          <label>,</label>
+                        }
+                        counter++;
+                        <a asp-action="CategoryDetails" asp-controller="Category" asp-route-id="@category.CategoryId">@category.CategoryName </a>
+                      }
+                    }
+                  }
+                }
+              }
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.UploadUserName)
+            </td>
+            <td style="width:300px">
+              <a asp-action="ReadDocument" asp-route-id="@item.DocumentId">Read</a> | @*change to api link*@
+              <a asp-action="DownloadDocument" asp-route-id="@item.DocumentId">Download</a>
+              @if (item.Authority == "private" && item.UploadUserId == Model.CurrentUserId)
+              {
+                <a asp-action="EditDocument" asp-route-id="@item.DocumentId"> | Edit</a>
+                <a asp-action="DeleteDocument" asp-route-id="@item.DocumentId"> | Delete</a>
+              }
+              else if (item.Authority == "public" && item.UploadUserId == Model.CurrentUserId)
+              {
+                <a asp-action="EditDocument" asp-route-id="@item.DocumentId"> | Edit</a>
+                <a asp-action="DeleteDocument" asp-route-id="@item.DocumentId"> | Delete</a>
+              }
+
+            </td>
+            <td>
+              @item.LastUpdateTime.ToShortDateString()
+              @item.LastUpdateTime.ToShortTimeString()
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+  <a  asp-controller="Category" asp-action="CategoryIndex">Category List</a> | <a asp-controller="Author" asp-action="AuthorIndex" >Author List</a> | <a asp-controller="Home" asp-action="CommentList">My reviews</a>
+</div>

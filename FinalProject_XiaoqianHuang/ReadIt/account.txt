@@ -1,0 +1,6 @@
+"UserEmail": "xhuang62@syr.edu",
+"UserPassword": "CSE686admin++"
+
+
+"UserEmail": "user@example.com",
+"UserPassword": "CSE686user++"

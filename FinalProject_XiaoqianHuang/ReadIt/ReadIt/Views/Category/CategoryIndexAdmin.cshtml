@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ReadIt.Models.Category>
+
+@{
+  ViewData["Title"] = "CategoryIndex";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Category List - Admin</h1>
+
+<p>
+  <a asp-action="CategoryCreate" asp-controller="Category">Add New Category</a>
+</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+        @Html.DisplayNameFor(model => model.CategoryName)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.CategoryIntro)
+      </th>
+      <th style="width:200px"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>
+          <a asp-action="CategoryDetails" asp-controller="Category" asp-route-id="@item.CategoryId">@item.CategoryName</a>
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.CategoryIntro)
+        </td>
+        <td style="width:200px"> 
+          <a asp-action="CategoryEdit" asp-controller="Category" asp-route-id="@item.CategoryId">Edit</a> |
+          <a asp-action="CategoryDetails" asp-controller="Category" asp-route-id="@item.CategoryId">Details</a> |
+          <a asp-action="CategoryDelete" asp-controller="Category" asp-route-id="@item.CategoryId">Delete</a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+@*display all the documents that in this category*@
+@*using indexview model*@
+
+<a asp-action="Index" asp-controller="Home">Back to Bookshelf</a>

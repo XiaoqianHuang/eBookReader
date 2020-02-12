@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ReadIt.Models.Author>
+
+@{
+  ViewData["Title"] = "AuthorIndexAdmin";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Author List - Admin</h1>
+
+<p>
+  <a asp-action="AuthorCreate" asp-controller="Author">Add New Author</a>
+</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+        @Html.DisplayNameFor(model => model.AuthorName)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.AuthorIntro)
+      </th>
+      <th style="width:200px"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>
+          <a asp-action="AuthorDetails" asp-controller="Author" asp-route-id="@item.AuthorId">@item.AuthorName</a>
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.AuthorIntro)
+        </td>
+
+        <td style="width:200px">
+          <a asp-action="AuthorEdit" asp-controller="Author" asp-route-id="@item.AuthorId">Edit</a> |
+          <a asp-action="AuthorDetails" asp-controller="Author" asp-route-id="@item.AuthorId">Details</a> |
+          <a asp-action="AuthorDelete" asp-controller="Author" asp-route-id="@item.AuthorId">Delete</a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<a asp-action="Index" asp-controller="Home">Back to Bookshelf</a>

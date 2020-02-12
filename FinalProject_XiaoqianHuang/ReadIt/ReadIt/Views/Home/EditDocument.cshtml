@@ -1,0 +1,100 @@
+﻿@model ReadIt.Models.IndexViewModel
+
+@{
+    ViewData["Title"] = "EditDocument";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Book</h1>
+
+<h4>Document</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+      <form asp-action="EditDocument"  enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Document.DocumentId" />
+        <div class="form-group">
+          <label asp-for="Document.Title" class="control-label"></label>
+          <input asp-for="Document.Title" class="form-control" />
+          <span asp-validation-for="Document.Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <label asp-for="Document.Authority" class="control-label"></label>
+          <p class="single-choice">
+            <input type="radio" value="public" asp-for="Document.Authority" checked="checked" class="single-choice" /> Public
+            <input type="radio" value="private" asp-for="Document.Authority" class="single-choice" /> Private
+          </p>
+        </div>
+        <div class="form-group">
+          <label asp-for="Authors" class="control-label">Author</label>
+          <div class="selected-items">
+            @{
+              foreach (var author in Model.Authors)
+              {
+                if (Model.SelectedAuthors.Contains(author.AuthorId))
+                {
+                  <input name="SelectedAuthors" type="checkbox" value="@author.AuthorId" checked="checked"/>@author.AuthorName
+                }
+                else
+                {
+                  <input name="SelectedAuthors" type="checkbox" value="@author.AuthorId" />@author.AuthorName
+                }
+              }
+            }
+          </div>
+          <span asp-validation-for="SelectedAuthors" class="text-danger"></span>
+          <a asp-action="AuthorCreate" asp-controller="Author">Add Author</a>
+        </div>
+        <div class="form-group">
+          <label asp-for="Categories" class="control-label">Category</label>
+          <div class="selected-items">
+            @{
+              foreach (var category in Model.Categories)
+              {
+                if (Model.SelectedCategories.Contains(category.CategoryId))
+                {
+                  <input name="SelectedCategories" type="checkbox" value="@category.CategoryId" checked="checked"/>@category.CategoryName
+                }
+                else
+                {
+                  <input name="SelectedCategories" type="checkbox" value="@category.CategoryId" />@category.CategoryName
+                }
+              }
+            }
+          </div>
+          <span asp-validation-for="SelectedCategories" class="text-danger"></span>
+          <a asp-action="CategoryCreate" asp-controller="Category">Add Category</a>
+        </div>
+        <div class="form-group">
+          @if (Model.Document.StoragePath == null)
+          {
+            <p>No file uploaded yet</p>
+          }
+          else
+          {
+            <label asp-for="Document.StoragePath" class="control-label">Uploaded File</label>
+          }
+          <p>@Html.DisplayFor(model => model.Document.StoragePath)</p>
+          <label asp-for="uploadedfile" class="control-label">Reload</label>
+          <input type="file" id="uploadedfile" name="uploadedfile" />
+        </div>
+        <div class="form-group">
+          <label asp-for="Document.DocumentIntro" class="control-label"></label>
+          <textarea asp-for="Document.DocumentIntro" class="form-control" style="width:600px; height:250px; overflow:auto; text-align:start;"></textarea>
+          <span asp-validation-for="Document.DocumentIntro" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Save" class="blackbtn btn" />
+        </div>
+      </form>
+    </div>
+</div>
+
+<div>
+  <a asp-action="Index">Back to Bookshelf</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

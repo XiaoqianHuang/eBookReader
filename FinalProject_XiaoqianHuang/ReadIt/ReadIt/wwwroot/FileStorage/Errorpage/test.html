@@ -1,0 +1,117 @@
+﻿<!--
+  - Lab4.html - Lab #4
+  - ver 1.0 - 6 Feb 2019
+  - Xiaoqian Huang
+-->
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Slide Show</title>
+    <link rel="stylesheet" href="CSSsheet.css" />
+    <script>
+        var counter = 0;
+        function larger(theframe)
+        {
+            var frame = document.getElementById(theframe);
+             frame.style.zoom = 1.1 * frame.style.zoom;
+        }
+        function smaller(theframe) 
+        {
+            var frame = document.getElementById(theframe);
+             frame.style.zoom =  frame.style.zoom/1.1;
+        }
+        function hide(framediv) 
+        {
+            var frame = document.getElementById(framediv);
+            if(counter == 0){
+                frame.style.display = "none";
+                counter = 1;
+                var button = document.getElementById("hide");
+                button.textContent = "Show";
+            }
+            else{
+                frame.style.display = "block";
+                counter = 0;
+                var button = document.getElementById("hide");
+                button.textContent = "Hide";
+            }
+
+        }
+        function setUrl(theframe){
+            var textbox = document.getElementById("url");
+            var frame = document.getElementById(theframe);
+
+            var url = textbox.value;
+            frame.src = url;
+            frame.location.reload();
+        }
+  function check404(theframe) {
+    if (document.frame("theframe").readyState != "complete") {
+      var frame = document.getElementById(theframe);
+      frame.src = "Errorpage.html";
+      frame.location.reload();
+    }
+
+
+    
+      }
+
+      function checkIframeLoaded() {
+        // Get a handle to the iframe element
+        var iframe = document.getElementById('theframe2');
+        var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+        // Check if loading is complete
+        if (iframeDoc.readyState != 'complete') {
+          //iframe.contentWindow.alert("Hello");
+          alert("I am loaded");
+          var frame = document.getElementById('theframe2');
+          frame.src = "Errorpage.html";
+          frame.location.reload();
+        } 
+          // The loading is complete, call the function we want executed once the iframe is loaded
+
+          return;
+        } 
+
+    </script>
+</head>
+
+<body onload="checkIframeLoaded()">
+    <h1>Lab#4 JavaScript Lab</h1>
+    <h4>Xiaoqian Huang</h4>
+    <div class="lighttheme" id="defaulttheme"></div>
+
+
+    
+    <div id="sizer">
+        <button type="button" onclick="hide('framediv')" id="hide">Hide</button>
+        &nbsp&nbsp
+        <button type="button" onclick="smaller('theframe')">-</button>
+        &nbsp&nbsp
+        <button type="button" onclick="larger('theframe')">+</button>
+        &nbsp&nbsp
+        <label>Please input the url:</label>
+        <input type = "text"
+            id = "url"
+            style = "font-family:'Cambria'; text-decoration-color:'maroon';width:400px;";
+            value = "http://ecs.syr.edu/faculty/fawcett/handouts/webpages/CSE686.htm"/>
+            
+        <button type="button" onclick="setUrl('theframe')">Submit</button>
+        <spacer-15></spacer-15>
+        <p></p>
+        <div id="framediv">
+            <iframe src="http://ecs.syr.edu/faculty/fawcett/handouts/webpages/CSE686.htm" id="theframe" width="800" height="500" frameborder="0"  style="zoom:1.2">
+            </iframe>
+        </div>
+    </div>
+
+<div id="framediv">
+  <iframe src="233.html" id="theframe2" width="1100" height="600" frameborder="0" ></iframe>
+</div>
+
+</body>
+</html>
